@@ -16,6 +16,7 @@ namespace PortalApp.API.Data
         public DbSet<Like> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Navig> Navigs { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public DbSet<Course> Courses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -40,10 +40,17 @@ export class LangService {
                 // console.log('last navig: ', this.navigs);
 
                 // // Register the new navigation
-                this._fuseNavigationService.register('navig', navigs);
+                // this._fuseNavigationService.register('navig', navigs);
 
                 // // Set the current navigation
-                this._fuseNavigationService.setCurrentNavigation('navig');
+                // this._fuseNavigationService.setCurrentNavigation('navig');
+
+                this._fuseNavigationService.updateNavigationItem('catalog', {
+                    type: 'collapsable',
+                    children: navigs
+                    
+                });
+
             },
             err => console.log(err),
             () => console.log('completed')

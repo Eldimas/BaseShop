@@ -39,10 +39,11 @@ export const navigation: FuseNavigation[] = [
         url      : '/news'
     },
     {
-        id        : 'products',
-        title     : 'Products',
+        id        : 'catalog',
+        title     : 'Catalog',
         type      : 'item',
-        url       : '/apps/e-commerce/products'
+        icon      : 'category' 
+        
     },
 
 

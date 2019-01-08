@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PortalApp.API.Migrations
 {
-    public partial class initwithcourse : Migration
+    public partial class initshop : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -180,8 +180,8 @@ namespace PortalApp.API.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
