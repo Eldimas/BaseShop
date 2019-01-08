@@ -23,6 +23,7 @@ import { FuseWidgetModule } from '@fuse/components';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { EditMenuComponent } from './edit-menu/edit-menu.component';
+import { EditCategoriesComponent } from './edit-categories/edit-categories.component';
 // import { AdminUsersService } from './admin-users/admin-users.service';
 // import { AdminUsersComponent } from './admin-users/admin-users.component';
 
@@ -36,7 +37,8 @@ const routes: Routes = [
     //     resolve  : {
     //       data: AdminUsersService
     //   }
-    }
+    },
+    { path: 'edit-categories', component: EditCategoriesComponent}
 ];
 
 @NgModule({
@@ -82,7 +84,8 @@ const routes: Routes = [
         MatTreeModule
     ],
     declarations: [
-        EditMenuComponent
+        EditMenuComponent,
+        EditCategoriesComponent
     ]
 })
 export class AdminMenuModule {}

@@ -6,6 +6,7 @@ export const locale = {
                 // ADMINISTRATION
                 'CTOR_DOCUMENTS': 'Constructor of documents',
                 'EDIT_MENU': 'Edit menu',
+                'EDIT_CATEGORIES': 'Edit categories',
                 'EDIT_LISTS': 'Edit lists',
                 'EDIT_NEWS': 'Edit news',
                 'EDIT_USERS_GROUPS': 'Edit users groups',

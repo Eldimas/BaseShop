@@ -21,6 +21,7 @@ import { User } from './_models/user';
 import { NavigService } from './_services/navig.service';
 import { Navig } from './_models/navig';
 import { LangService } from './_services/lang.service';
+import { Category } from './_models/category';
 
 @Component({
     selector: 'app',
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
     fuseConfig: any;
     navigation: any;
     navigs: Navig[] = [];
+    categories: Category[] = [];
 
     // Private
     private _unsubscribeAll: Subject<any>;
@@ -125,7 +127,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // Use a language
         this._translateService.use('ru');
-        this._langService.getMenuForCurrentLang(this._translateService.currentLang);
+        // this._langService.getMenuForCurrentLang(this._translateService.currentLang);
+        this._langService.getCategoryForCurrentLang(this._translateService.currentLang);
         /**
          * ----------------------------------------------------------------------------------------------------
          * ngxTranslate Fix Start

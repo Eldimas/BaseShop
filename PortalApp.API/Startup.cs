@@ -101,6 +101,7 @@ namespace PortalApp.API
             services.AddScoped<IPortalRepository, PortalRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<LogUserActivity>();
         }
 

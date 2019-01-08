@@ -4,6 +4,8 @@ import { createHttpObservable } from 'app/utils/util';
 import { NavigService } from './navig.service';
 import { Navig } from 'app/_models/navig';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
+import { Category } from 'app/_models/category';
+import { CategoryService } from './category.service';
 
 @Injectable({
     providedIn: 'root'
@@ -11,9 +13,11 @@ import { FuseNavigationService } from '@fuse/components/navigation/navigation.se
 export class LangService {
     baseUrl = environment.apiUrl;
     navigs: Navig[] = [];
+    categories: Category[] = [];
 
     constructor(
         private _navigService: NavigService,
+        private _categoryService: CategoryService,
         private _fuseNavigationService: FuseNavigationService
     ) {}
 
@@ -48,6 +52,47 @@ export class LangService {
                 this._fuseNavigationService.updateNavigationItem('catalog', {
                     type: 'collapsable',
                     children: navigs
+                    
+                });
+
+            },
+            err => console.log(err),
+            () => console.log('completed')
+        );
+    }
+
+
+    getCategoryForCurrentLang(lang: string): any {
+        // return createHttpObservable(
+        //     this.baseUrl + 'region/GetRegionsForSelect'
+        // );
+        // alert(lang);
+        
+        this._fuseNavigationService.unregister('navig');
+
+        const http$ = this._categoryService.getCategories(lang);
+        http$.subscribe(
+            categories => {
+                // console.log('navig: ', navigs);
+                // this.navigs = navigs;
+
+                categories.forEach(category => {
+
+                    const cat = new Category(category);
+                    this.categories.push(cat);
+                });
+
+                // console.log('last navig: ', this.navigs);
+
+                // // Register the new navigation
+                // this._fuseNavigationService.register('navig', navigs);
+
+                // // Set the current navigation
+                // this._fuseNavigationService.setCurrentNavigation('navig');
+
+                this._fuseNavigationService.updateNavigationItem('catalog', {
+                    type: 'collapsable',
+                    children: categories
                     
                 });
 

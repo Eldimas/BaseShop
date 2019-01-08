@@ -75,6 +75,13 @@ export const navigation: FuseNavigation[] = [
                 url      : '/admin/edit-menu',
             },
             {
+                id       : 'edit-categories',
+                title    : 'Edit categories',
+                translate: 'NAV.EDIT_CATEGORIES',
+                type     : 'item',
+                url      : '/admin/edit-categories',
+            },
+            {
                 id       : 'edit-lists',
                 title    : 'Edit lists',
                 translate: 'NAV.EDIT_LISTS',
