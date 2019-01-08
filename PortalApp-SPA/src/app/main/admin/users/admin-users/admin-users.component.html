@@ -1,0 +1,125 @@
+
+<div id="products" class="page-layout carded fullwidth inner-scroll">
+ 
+  <!-- TOP BACKGROUND -->
+  <div class="top-bg accent"></div>
+  <!-- / TOP BACKGROUND -->
+ 
+  <!-- CENTER -->
+  <div class="center">
+ 
+      <!-- HEADER -->
+      <div class="header accent"
+           fxLayout="column" fxLayoutAlign="center center"
+           fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-between center">
+ 
+          <!-- APP TITLE -->
+          <div class="logo mb-24 mb-md-0"
+               fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon class="logo-icon s-32 mr-16" [@animate]="{value:'*',params:{delay:'50ms',scale:'0.2'}}">
+                  shopping_basket
+              </mat-icon>
+              <span class="logo-text h1" [@animate]="{value:'*',params:{delay:'100ms',x:'-25px'}}">
+                  Users
+              </span>
+          </div>
+          <!-- / APP TITLE -->
+ 
+          <!-- SEARCH -->
+          <div class="search-wrapper mx-32 mx-md-0">
+              <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+                  <mat-icon>search</mat-icon>
+                  <input #filter placeholder="Search for a product">
+              </div>
+          </div>
+          <!-- / SEARCH -->
+ 
+          <!-- ADD BUTTON -->
+          <button mat-raised-button
+                  [routerLink]="'/apps/e-commerce/products/new'"
+                  class="add-product-button fuse-white mt-24 mt-md-0">
+              <span>ADD NEW PRODUCT</span>
+          </button>
+          <!-- / ADD BUTTON -->
+ 
+      </div>
+      <!-- / HEADER -->
+
+      <!-- CONTENT CARD -->
+      <div class="content-card">
+        <mat-table 
+        [dataSource]="dataSource" 
+        class="products-table"
+        matSort
+        [@animateStagger]="{value:'50'}"
+        fusePerfectScrollbar>
+
+          <!--- Note that these columns can be defined in any order.
+                The actual rendered columns are set as a property on the row definition" -->
+
+           <!-- ID Column -->
+           <!-- <ng-container matColumnDef="position">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>No. </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <p class="text-truncate">{{element.position}}</p>
+            </mat-cell>
+        </ng-container> -->
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>No. </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <p class="text-truncate">{{element.id}}</p>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="username">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+              <p class="text-truncate">{{element.username}}</p>
+          </mat-cell>
+      </ng-container>
+
+      
+
+      <ng-container matColumnDef="city">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>city </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+            <p class="text-truncate">{{element.city}}</p>
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="country">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>country </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+          <p class="text-truncate">{{element.country}}</p>
+      </mat-cell>
+  </ng-container>
+        
+
+          <mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></mat-header-row>
+
+          <mat-row *matRowDef="let user; columns: displayedColumns;"
+                   class="product"
+                   matRipple
+                   [routerLink]="'/admin/admin-users/'+ user.id">
+          </mat-row>
+        </mat-table >
+
+       <mat-paginator #paginator
+                           [length]="dataSource.filteredData.length"
+                           [pageIndex]="0"
+                           [pageSize]="10"
+                           [pageSizeOptions]="[5, 10, 25, 100]">
+            </mat-paginator>
+       
+
+    <!-- </div> -->
+    <!-- / CONTENT CARD -->
+ 
+    
+  </div>
+  <!-- / CENTER -->
+</div>
+
+
+
+

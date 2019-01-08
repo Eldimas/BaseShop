@@ -1,0 +1,18 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+    
+    <mat-tab-group>
+        <mat-tab label="Beginners">
+          <pre>{{ beginnerCourses$ | async | json }}</pre>  
+            <!-- <courses-card-list [courses]="[]">
+
+        </courses-card-list> -->
+        </mat-tab>
+
+        <mat-tab label="Advanced">
+            <!-- <courses-card-list [courses]="[]">
+          
+        </courses-card-list> -->
+            <pre>{{ advancedCourses$ | async | json }}</pre>
+        </mat-tab>
+    </mat-tab-group>
+</div>

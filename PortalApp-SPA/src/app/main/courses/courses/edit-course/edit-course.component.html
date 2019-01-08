@@ -1,0 +1,21 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+    <p>edit-course works!</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="example-container">
+            <mat-form-field appearance="outline">
+                <mat-label>email</mat-label>
+                <input matInput formControlName="email" />
+                <mat-error *ngIf="form.get('email').invalid  && form.get('email').touched"> 
+                    Email is required </mat-error>
+                    <mat-error *ngIf="form.getError('email')">Email is not valid</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>name</mat-label>
+                <input matInput formControlName="name" />
+                <mat-error> Name is required </mat-error>
+            </mat-form-field>
+            <button [disabled]="form.invalid" mat-button type="submit">Save</button>
+        </div>
+    </form>
+</div>
