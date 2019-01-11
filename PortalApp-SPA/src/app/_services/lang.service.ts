@@ -26,7 +26,7 @@ export class LangService {
         //     this.baseUrl + 'region/GetRegionsForSelect'
         // );
         // alert(lang);
-        
+
         this._fuseNavigationService.unregister('navig');
 
         const http$ = this._navigService.getNavig(lang);
@@ -36,7 +36,6 @@ export class LangService {
                 // this.navigs = navigs;
 
                 navigs.forEach(navig => {
-
                     const nav = new Navig(navig);
                     this.navigs.push(nav);
                 });
@@ -52,22 +51,19 @@ export class LangService {
                 this._fuseNavigationService.updateNavigationItem('catalog', {
                     type: 'collapsable',
                     children: navigs
-                    
                 });
-
             },
             err => console.log(err),
             () => console.log('completed')
         );
     }
 
-
     getCategoryForCurrentLang(lang: string): any {
         // return createHttpObservable(
         //     this.baseUrl + 'region/GetRegionsForSelect'
         // );
         // alert(lang);
-        
+
         this._fuseNavigationService.unregister('navig');
 
         const http$ = this._categoryService.getCategories(lang);
@@ -77,28 +73,27 @@ export class LangService {
                 // this.navigs = navigs;
 
                 categories.forEach(category => {
-
                     const cat = new Category(category);
                     this.categories.push(cat);
                 });
 
-                // console.log('last navig: ', this.navigs);
-
-                // // Register the new navigation
-                // this._fuseNavigationService.register('navig', navigs);
-
-                // // Set the current navigation
-                // this._fuseNavigationService.setCurrentNavigation('navig');
+                // const jsonCat = JSON.stringify(this.categories);
+                // this._fuseNavigationService.updateNavigationItem('catalog', {
+                //     type: 'collapsable',
+                //     url: null,
+                //     children: []
+                // });
+                
 
                 this._fuseNavigationService.updateNavigationItem('catalog', {
                     type: 'collapsable',
+                    url: null,
                     children: categories
-                    
                 });
-
             },
             err => console.log(err),
             () => console.log('completed')
         );
+
     }
 }

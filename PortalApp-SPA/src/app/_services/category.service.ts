@@ -24,4 +24,12 @@ export class CategoryService {
        return this.http.post(this.baseUrl + 'add/', category);
         // this.http.post(this.baseUrl + 'addId/', 1);
     }
+
+    // tslint:disable-next-line:typedef
+    removeCategory(id: string) {
+        const path = this.baseUrl + 'remove/' + id;
+      return  this.http.delete(this.baseUrl + 'remove/' + id);
+        console.log('id: ', id);
+        
+    }
 }

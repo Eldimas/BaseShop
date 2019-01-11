@@ -54,95 +54,6 @@ export class TodoItemNode {
     // item: string;
 }
 
-/**
- * The Json tree data in string. The data could be parsed into Json object
- */
-const TREE_DATA = [
-    {
-        id: 'cf55339b-9f23-4532-994d-1a8cfc8378f6',
-        title: 'AdminEng',
-        type: 'group',
-        icon: 'apps',
-        url: '/app/new',
-        expanded: false,
-        selected: false,
-        children: [
-            {
-                title: 'Childgroup 1',
-                type: 'group',
-                icon: 'apps',
-                url: '/app/new',
-                expanded: false,
-                id: '2',
-                selected: true,
-                children: []
-            },
-            {
-                title: 'Childgroup 2',
-                type: 'group',
-                icon: 'apps',
-                url: '/app/new',
-                expanded: false,
-                id: '3',
-                selected: false,
-                children: [
-                    {
-                        title: 'Child of child',
-                        type: 'group',
-                        icon: 'apps',
-                        url: '/app/new',
-                        expanded: false,
-                        id: '4',
-                        selected: false,
-                        children: []
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        title: 'Group 2',
-        type: 'group',
-        icon: 'apps',
-        url: '/app/new',
-        expanded: false,
-        id: '5',
-        selected: false,
-        children: [
-            {
-                title: 'Childgroup 1',
-                type: 'group',
-                icon: 'apps',
-                url: '/app/new',
-                expanded: false,
-                id: '6',
-                selected: false,
-                children: []
-            },
-            {
-                title: 'Childgroup 2',
-                type: 'group',
-                icon: 'apps',
-                url: '/app/new',
-                expanded: false,
-                id: '7',
-                selected: false,
-                children: [
-                    {
-                        title: 'Child of child',
-                        type: 'group',
-                        icon: 'apps',
-                        url: '/app/new',
-                        expanded: false,
-                        id: '8',
-                        selected: true,
-                        children: []
-                    }
-                ]
-            }
-        ]
-    }
-];
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -250,6 +161,16 @@ export class ChecklistDatabase {
         node.title = title;
         // node.id = id;
         node.children = null;
+        this.dataChange.next(this.data);
+        console.log('data: ', this.data);
+    }
+
+      // tslint:disable-next-line:typedef
+      removeItem(node: TodoItemNode) {
+        // node.item = name;
+        // node.title = title;
+        // node.id = id;
+        // node.children = null;
         this.dataChange.next(this.data);
         console.log('data: ', this.data);
     }
@@ -470,30 +391,49 @@ export class EditCategoriesComponent {
         // console.log('node: ', node);
     }
 
+    // tslint:disable-next-line:typedef
+    removeItem(node: TodoItemFlatNode) {
+
+        this._categoryService.removeCategory(node.id).subscribe( res => {
+            console.log(res);
+            this._langService.getCategoryForCurrentLang(this._translateService.currentLang);
+
+            this._categoryService.getCategories('ru').subscribe( categories => {
+                // console.log(result);
+                categories.forEach(category => {
+                    const cat = new Category(category);
+                    this.database.cats_data = [];
+                    this.database.cats_data.push(cat);
+                });
+                this.database.initialize();
+            });
+            // const nestedNode = this.getParentNode(node);
+            // if (nestedNode !== null) {
+            //     for (let i = 0; i < nestedNode.children.length; i++) {
+            //         const element = nestedNode.children[i];
+            //         if (element.id === node.id)
+            //         {
+            //             nestedNode.children.splice(i, 1);
+            //             break;
+            //         }
+                    
+            //     }
+            //     // this.database.updateItem(nestedNode, nestedNode.title);
+
+            // }
+            // nestedNode.children.splice(nestedNode.children.indexOf(node.id), 1);
+        });
+        // alert(node.id);
+    }
+
     /** Save the node to database */
     // tslint:disable-next-line:typedef
-    saveNode(node: TodoItemFlatNode, title: string, titleEng: string, titleKaz: string, type: string, icon: string, url: string) {
-        console.log('save node: ', node);
-
+    // saveNode(node: TodoItemFlatNode, title: string, titleEng: string, titleKaz: string, type: string, icon: string, url: string) 
+    // tslint:disable-next-line:typedef
+    saveNode(node: TodoItemFlatNode, title: string, titleEng: string, titleKaz: string) 
+    {
+       
         const nestedNode = this.flatNodeMap.get(node);
-
-        // const navig = new NavigUpdate;
-        // navig.id = nestedNode.id;
-        // navig.parentId = nestedNode.parentId;
-        // navig.title = title;
-        // navig.titleEng = titleEng;
-        // navig.titleKaz = titleKaz;
-        // navig.type = type;
-        // navig.icon = icon;
-        // navig.url = url;
-
-        // this._navigService.addNavig(navig).subscribe(
-        //   res => {
-        //     console.log(res);
-            
-        //     this._langService.getMenuForCurrentLang(this._translateService.currentLang);
-        //   }
-        // );
 
         const cat = new CategoryUpdate;
         cat.id = nestedNode.id;
@@ -501,9 +441,9 @@ export class EditCategoriesComponent {
         cat.title = title;
         cat.titleEng = titleEng;
         cat.titleKaz = titleKaz;
-        cat.type = type;
-        cat.icon = icon;
-        cat.url = url;
+        // cat.type = type;
+        // cat.icon = icon;
+        // cat.url = url;
 
         this._categoryService.addCategory(cat).subscribe(
           res => {
@@ -518,10 +458,32 @@ export class EditCategoriesComponent {
     }
 
     // tslint:disable-next-line:typedef
-    // saveNode(node: TodoItemNode, itemValue: string) {
-    //   // const nestedNode = this.flatNodeMap.get(node);
-    //   // tslint:disable-next-line:no-non-null-assertion
-    //   this.database.updateItem(node!, itemValue);
+    saveRootNode(title: string, titleEng: string, titleKaz: string) {
+            console.log(title + ' / ' + titleEng + ' / ' + titleKaz);
 
-    // }
+            const uuidv1 = require('uuid/v1');
+
+            const cat = new CategoryUpdate;
+            cat.id = uuidv1();
+            cat.parentId = null;
+            cat.title = title;
+            cat.titleEng = titleEng;
+            cat.titleKaz = titleKaz;
+            // cat.type = type;
+            // cat.icon = icon;
+            // cat.url = url;
+    
+            this._categoryService.addCategory(cat).subscribe(
+              res => {
+                console.log(res);
+                
+                this._langService.getCategoryForCurrentLang(this._translateService.currentLang);
+              }
+            );
+
+            // tslint:disable-next-line:no-non-null-assertion
+            this.database.initialize();
+
+    }
+
 }

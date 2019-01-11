@@ -6,7 +6,7 @@ namespace PortalApp.API.Dtos
     public class CategoryUpdateDto
     {
         public Guid Id { get; set; }
-        public Guid ParentId { get; set; }
+        public Guid? ParentId { get; set; }
         public string Title { get; set; }
         public string TitleEng { get; set; }
         public string TitleKaz { get; set; }

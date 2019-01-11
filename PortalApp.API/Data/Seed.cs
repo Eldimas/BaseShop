@@ -89,15 +89,18 @@ namespace PortalApp.API.Data
                 {
                     Id = Guid.NewGuid(),
                     Title = "Category_1",
-                    TitleEng = "Category_1",
-                    TitleKaz = "Category_1",
+                    // TitleEng = "Category_1",
+                    // TitleKaz = "Category_1",
                     Type = "collapsable",
                     Icon = "edit",
                     Url = null,
                     Children = new List<Category>() {
                         new Category() {Id = g_1_1, Title = "Category_1_1", TitleEng = "Category_1_1", TitleKaz = "Category_1_1", Type = "item",  Url = "/category/" + g_1_1, Children = null},
                         new Category() {Id = g_1_2, Title = "Category_1_2", TitleEng = "Category_1_2", TitleKaz = "Category_1_2", Type = "item", Url = "/category/" + g_1_2, Children = null},
-                    }
+                //   new Category() {Id = g_1_1, Title = "Category_1_1",  Type = "item",  Url = "/category/" + g_1_1, Children = null},
+                //         new Category() {Id = g_1_2, Title = "Category_1_2",  Type = "item", Url = "/category/" + g_1_2, Children = null},
+                  
+                  }
                 };
 
                  _context.Categories.Add(cats);

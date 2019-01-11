@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -35,35 +36,67 @@ namespace PortalApp.API.Controllers
         public async Task<IActionResult> Add(CategoryUpdateDto categoryUpdateDto)
         {
 
-            var parentNavig = await _context.Categories.FirstOrDefaultAsync(x => x.Id == categoryUpdateDto.ParentId);
-
-            if (parentNavig == null)
+            if (categoryUpdateDto.ParentId != null)
             {
-                return BadRequest("error");
+                var parentNavig = await _context.Categories.FirstOrDefaultAsync(x => x.Id == categoryUpdateDto.ParentId);
+
+                if (parentNavig == null)
+                {
+                    return BadRequest("error");
+                }
+
+                if (parentNavig.Children == null)
+                {
+                    parentNavig.Children = new List<Category>();
+                    parentNavig.Type = "collapsable";
+                }
+
+                var newCat = new Category()
+                {
+                    Id = categoryUpdateDto.Id,
+                    Title = categoryUpdateDto.Title,
+                    TitleEng = categoryUpdateDto.TitleEng,
+                    TitleKaz = categoryUpdateDto.TitleKaz,
+                    Icon = categoryUpdateDto.Icon,
+                    Type = "item",
+                    Url = "/category/" + categoryUpdateDto.Id
+                };
+
+                parentNavig.Children.Add(newCat);
+                _context.SaveChanges();
+
+
+
             }
-
-            if (parentNavig.Children == null)
+            else
             {
-                parentNavig.Children = new List<Category>();
-                parentNavig.Type = "group";
+                var newCat = new Category()
+                {
+                    Id = categoryUpdateDto.Id,
+                    Title = categoryUpdateDto.Title,
+                    TitleEng = categoryUpdateDto.TitleEng,
+                    TitleKaz = categoryUpdateDto.TitleKaz,
+                    Icon = categoryUpdateDto.Icon,
+                    Type = "item",
+                    Url = "/category/" + categoryUpdateDto.Id
+                };
+                _context.Categories.Add(newCat);
+                _context.SaveChanges();
             }
-
-            var newCat = new Category()
-            {
-                Id = categoryUpdateDto.Id,
-                Title = categoryUpdateDto.Title,
-                TitleEng = categoryUpdateDto.TitleEng,
-                TitleKaz = categoryUpdateDto.TitleKaz,
-                Icon = categoryUpdateDto.Icon,
-                Type = "item",
-                Url = categoryUpdateDto.Url
-            };
-
-            parentNavig.Children.Add(newCat);
-            _context.SaveChanges();
-
 
             return Ok();
+
         }
+
+        [HttpDelete("remove/{id}")]
+         public async Task<IActionResult> Remove(Guid id){
+
+             var cat = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+             _context.Categories.Remove(cat);
+             _context.SaveChanges();
+
+             return Ok();
+         }
     }
 }

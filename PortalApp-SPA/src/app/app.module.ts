@@ -23,6 +23,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { HomeModule } from './main/home/home.module';
 import { ProbaModule } from './main/proba/proba.module';
 import { CoursesModule } from './main/courses/courses/courses.module';
+import { CategoriesModule } from './main/categories/categories.module';
 
 
 
@@ -89,6 +90,7 @@ const appRoutes: Routes = [
         ProbaModule,
 
         CoursesModule,
+        CategoriesModule,
 
         JwtModule.forRoot({
           config: {

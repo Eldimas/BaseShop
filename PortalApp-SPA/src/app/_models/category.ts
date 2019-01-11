@@ -14,7 +14,7 @@ export class Category {
         this.title = category.title || '';
         this.type = category.type || '';
         this.icon = category.icon || '';
-        this.url = category.url || '';
+        this.url = (category.url != null && category.url.length > 0) ? category.url : null;
         this.children = category.children || [];
         this.expanded = category.expanded || false;
         this.selected = category.selected || false;
