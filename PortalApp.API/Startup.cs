@@ -132,7 +132,8 @@ namespace PortalApp.API
             }
 
             // app.UseHttpsRedirection();
-            seeder.SeedCategory();
+            // seeder.SeedCategory();
+            seeder.SeedCategoryProduct();
             seeder.SeedUsers();
             seeder.SeedMenu();
             seeder.SeedCourses();

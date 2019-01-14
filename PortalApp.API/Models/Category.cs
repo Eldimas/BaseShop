@@ -14,5 +14,6 @@ namespace PortalApp.API.Models
         public string TitleKaz { get; set; }
         
         public ICollection<Category> Children { get; set; }
+        public ICollection<CategoryProduct> CategoryProducts { get; set; }
     }
 }

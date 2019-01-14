@@ -17,12 +17,26 @@ namespace PortalApp.API.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Navig> Navigs { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<CategoryProduct> CategoryProduct { get; set; }
         public DbSet<Course> Courses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<CategoryProduct>()
+            .HasKey(bs => new {bs.CategoryId, bs.ProductId});
+
+            builder.Entity<CategoryProduct>()
+            .HasOne(bc => bc.Category)
+            .WithMany(p => p.CategoryProducts)
+            .HasForeignKey(bc => bc.CategoryId);
+
+            builder.Entity<CategoryProduct>()
+            .HasOne(bc => bc.Product)
+            .WithMany(p => p.CategoryProducts)
+            .HasForeignKey(bc => bc.ProductId);
             
 
             builder.Entity<UserRole>(userRole => 

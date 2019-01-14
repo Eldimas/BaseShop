@@ -10,6 +10,20 @@ export const navigation: FuseNavigation[] = [
         url      : '/home'
     },
     {
+        id       : 'shopping_cart',
+        title    : 'Shopping Cart',
+        type     : 'item',
+        icon     : 'home',
+        url      : '/shopping-cart'
+    },
+    {
+        id       : 'products',
+        title    : 'Products',
+        type     : 'item',
+        icon     : 'apps',
+        url      : '/products'
+    },
+    {
         id       : 'proba',
         title    : 'Proba',
         type     : 'item',

@@ -23,9 +23,11 @@ namespace PortalApp.API.Data
             _context = context;
         }
 
-        public void SeedCourses() {
-            
-            if(!_context.Courses.Any()) {
+        public void SeedCourses()
+        {
+
+            if (!_context.Courses.Any())
+            {
                 var coursesData = System.IO.File.ReadAllText("Data/JsonData/CourseSeedData.json");
                 var courses = JsonConvert.DeserializeObject<List<Course>>(coursesData);
 
@@ -79,8 +81,46 @@ namespace PortalApp.API.Data
             }
         }
 
-        public void SeedCategory() {
-            if(!_context.Categories.Any())
+
+        public void SeedCategoryProduct()
+        {
+
+            if (!_context.CategoryProduct.Any())
+            {
+
+                var g_1_1 = Guid.NewGuid();
+                var g_1_2 = Guid.NewGuid();
+
+                var catProd = new CategoryProduct();
+                catProd.Category = new Category()
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Category_1",
+                    TitleEng = "Category_1",
+                    TitleKaz = "Category_1",
+                    Type = "collapsable",
+                    Icon = "edit",
+                    Url = null,
+                    Children = new List<Category>() {
+                        new Category() {Id = g_1_1, Title = "Category_1_1", TitleEng = "Category_1_1", TitleKaz = "Category_1_1", Type = "item",  Url = "/category/" + g_1_1, Children = null},
+                        new Category() {Id = g_1_2, Title = "Category_1_2", TitleEng = "Category_1_2", TitleKaz = "Category_1_2", Type = "item", Url = "/category/" + g_1_2, Children = null},
+                }
+                };
+
+                catProd.Product = new Product() {
+                    Id = Guid.NewGuid(),
+                    Title = "Product 1",
+                    Description = "Description 1",
+                    Price = "price 1"
+                };
+
+                _context.CategoryProduct.Add(catProd);
+                _context.SaveChanges();
+            }
+        }
+        public void SeedCategory()
+        {
+            if (!_context.Categories.Any())
             {
                 var g_1_1 = Guid.NewGuid();
                 var g_1_2 = Guid.NewGuid();
@@ -99,11 +139,10 @@ namespace PortalApp.API.Data
                         new Category() {Id = g_1_2, Title = "Category_1_2", TitleEng = "Category_1_2", TitleKaz = "Category_1_2", Type = "item", Url = "/category/" + g_1_2, Children = null},
                 //   new Category() {Id = g_1_1, Title = "Category_1_1",  Type = "item",  Url = "/category/" + g_1_1, Children = null},
                 //         new Category() {Id = g_1_2, Title = "Category_1_2",  Type = "item", Url = "/category/" + g_1_2, Children = null},
-                  
-                  }
+                }
                 };
 
-                 _context.Categories.Add(cats);
+                _context.Categories.Add(cats);
                 // _context.Navigs.Add(navig);
 
                 _context.SaveChanges();

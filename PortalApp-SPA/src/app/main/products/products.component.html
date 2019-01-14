@@ -1,0 +1,11 @@
+<div class="page-layout blank p-24" fusePerfectScrollbar>
+    <pre>
+      {{products | json}}
+    </pre>
+
+    <button mat-button *ngFor="let product of products" (click)="addToCart(product)">
+      {{product.title}}
+    </button>
+</div>
+
+

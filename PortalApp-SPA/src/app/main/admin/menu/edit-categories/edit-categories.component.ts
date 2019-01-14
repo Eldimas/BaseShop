@@ -6,9 +6,7 @@ import {
     MatTreeFlattener
 } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { Navig } from 'app/_models/navig';
 import { NavigService } from 'app/_services/navig.service';
-import { NavigUpdate } from 'app/_models/navigUpdate.model';
 import { LangService } from 'app/_services/lang.service';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -71,41 +69,27 @@ export class ChecklistDatabase {
     }
 
     constructor(private _categoryService: CategoryService) {
-        // this.initialize();
-         ///////////////////////////////////////
     const http$ = this._categoryService.getCategories('ru');
     http$.subscribe(
       categories => {
-          // console.log('navig: ', navigs);
-          // this.navigs = navigs;
-
+          
           categories.forEach(category => {
               const cat = new Category(category);
               this.cats_data.push(cat);
           });
 
           this.initialize();
-          // console.log('last navig: ', this.navigs_data);
-
-          // // // Register the new navigation
-          // this._fuseNavigationService.register('navig', navigs);
-
-          // // // Set the current navigation
-          // this._fuseNavigationService.setCurrentNavigation('navig');
       },
       err => console.log(err),
       () => console.log('completed')
   );
-
-  ////////////////////////////////////////
-    }
+}
 
     // tslint:disable-next-line:typedef
     initialize() {
         // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
         //     file node as children.
-        // const data = this.buildFileTree(TREE_DATA, 0);
-
+        
         const data = this.buildFileTree(this.cats_data, 0);
 
         // Notify the change.
@@ -125,10 +109,6 @@ export class ChecklistDatabase {
             // node.name = key;
             node.title = value.title;
             node.id = value.id;
-
-            // console.log('value: ', value);
-            // console.log('key: ', key);
-            // console.log('accumulator: ', accumulator);
 
             if (value != null) {
                 if (typeof value === 'object' && value.children != null && value.children.length > 0) {
@@ -157,9 +137,7 @@ export class ChecklistDatabase {
 
     // tslint:disable-next-line:typedef
     updateItem(node: TodoItemNode, title: string) {
-        // node.item = name;
         node.title = title;
-        // node.id = id;
         node.children = null;
         this.dataChange.next(this.data);
         console.log('data: ', this.data);
@@ -167,10 +145,6 @@ export class ChecklistDatabase {
 
       // tslint:disable-next-line:typedef
       removeItem(node: TodoItemNode) {
-        // node.item = name;
-        // node.title = title;
-        // node.id = id;
-        // node.children = null;
         this.dataChange.next(this.data);
         console.log('data: ', this.data);
     }

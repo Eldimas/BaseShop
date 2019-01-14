@@ -24,6 +24,8 @@ import { HomeModule } from './main/home/home.module';
 import { ProbaModule } from './main/proba/proba.module';
 import { CoursesModule } from './main/courses/courses/courses.module';
 import { CategoriesModule } from './main/categories/categories.module';
+import { ShoppingCartModule } from './main/shopping-cart/shopping-cart.module';
+import { ProductsModule } from './main/products/products.module';
 
 
 
@@ -88,6 +90,8 @@ const appRoutes: Routes = [
         SampleModule,
         HomeModule,
         ProbaModule,
+        ShoppingCartModule,
+        ProductsModule,
 
         CoursesModule,
         CategoriesModule,
