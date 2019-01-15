@@ -87,34 +87,43 @@ namespace PortalApp.API.Data
 
             if (!_context.CategoryProduct.Any())
             {
-
+                var main_g = Guid.NewGuid();
                 var g_1_1 = Guid.NewGuid();
                 var g_1_2 = Guid.NewGuid();
 
                 var catProd = new CategoryProduct();
                 catProd.Category = new Category()
                 {
-                    Id = Guid.NewGuid(),
+                    Id = main_g,
                     Title = "Category_1",
                     TitleEng = "Category_1",
                     TitleKaz = "Category_1",
                     Type = "collapsable",
                     Icon = "edit",
-                    Url = null,
+                    Url = "/category/" + main_g,
                     Children = new List<Category>() {
                         new Category() {Id = g_1_1, Title = "Category_1_1", TitleEng = "Category_1_1", TitleKaz = "Category_1_1", Type = "item",  Url = "/category/" + g_1_1, Children = null},
                         new Category() {Id = g_1_2, Title = "Category_1_2", TitleEng = "Category_1_2", TitleKaz = "Category_1_2", Type = "item", Url = "/category/" + g_1_2, Children = null},
                 }
                 };
 
+                var prodId = Guid.NewGuid();
                 catProd.Product = new Product() {
-                    Id = Guid.NewGuid(),
+                    Id = prodId,
                     Title = "Product 1",
                     Description = "Description 1",
-                    Price = "price 1"
+                    Price = 10.1m
                 };
 
                 _context.CategoryProduct.Add(catProd);
+
+                var catProd2 = new CategoryProduct(){
+                    CategoryId = g_1_1,
+                    ProductId = prodId
+                };
+
+                _context.CategoryProduct.Add(catProd2);
+
                 _context.SaveChanges();
             }
         }

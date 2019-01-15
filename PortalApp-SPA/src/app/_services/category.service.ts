@@ -16,6 +16,19 @@ export class CategoryService {
         );
     }
 
+    getCategory(lang: string, id: string): any {
+        return createHttpObservable(
+            this.baseUrl + `getCategory/${lang}/${id}`
+        );
+    }
+
+    getProductsByCategoryId(lang: string, id: string): any {
+        return createHttpObservable(
+            this.baseUrl + `getProductsByCategoryId/${lang}/${id}`
+        ); 
+    }
+
+
     // tslint:disable-next-line:typedef
     addCategory(category: any) {
         console.log('NavigUpdate: ', category);

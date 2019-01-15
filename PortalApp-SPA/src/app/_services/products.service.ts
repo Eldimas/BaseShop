@@ -13,15 +13,18 @@ export class ProductsService {
     products: Product[] = [
         {
             id: '111',
-            title: 'title 111'
+            title: 'title 111',
+            price: 10.99
         },
         {
             id: '222',
-            title: 'title 2222'
+            title: 'title 2222',
+            price: 11.99
         },
         {
             id: '333',
-            title: 'title 333'
+            title: 'title 333',
+            price: 12.99
         }
     ];
 
@@ -30,6 +33,8 @@ export class ProductsService {
     getProducts(): Product[] {
         return this.products;
     }  
+
+    
 
     // getNavig(lang: string): any {
     //     return createHttpObservable(

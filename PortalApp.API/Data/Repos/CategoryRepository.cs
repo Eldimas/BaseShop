@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -91,6 +92,70 @@ namespace PortalApp.API.Data.Repos
             // return lstCat;
 
             return rootCategories;
+        }
+
+        public async Task<Category> GetCategoryByLangById(string lang, Guid id)
+        {
+            var category = await _context.Categories
+            // .Include(x => x.CategoryProducts)
+            // .ThenInclude(x => x.Product)
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+            return category;
+        }
+
+        public async Task<IEnumerable<Product>> GetProductByCategoryId(string lang, Guid id)
+        {
+             var mainCategory = await _context.Categories
+            .Include(x => x.Children)
+                .ThenInclude(x => x.Children)
+                .ThenInclude(x => x.Children)
+                .ThenInclude(x => x.Children)
+                .ThenInclude(x => x.Children)
+                .ThenInclude(x => x.Children)
+                .ThenInclude(x => x.Children)
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+            var listGuid = new List<Guid>();
+            listGuid.Add(mainCategory.Id.Value);
+            if(mainCategory.Children.Count > 0) {
+                listGuid = BuildCategoryList(mainCategory.Children, listGuid);
+            }
+
+            
+            var catProdList = await _context.CategoryProduct.Where(x => listGuid.Contains(x.Category.Id.Value))
+            .Include(x => x.Product)
+            .Select(x=> x.Product)
+            .ToListAsync();
+
+            var prodList = new List<Product>();
+            foreach (var prod in catProdList)
+            {
+                if(!prodList.Contains(prod)) {
+                    prodList.Add(prod);
+                }
+            }
+
+
+
+            return prodList;
+
+
+        }
+        
+        private List<Guid> BuildCategoryList(IEnumerable<Category> categories, List<Guid> listGuid) {
+            
+            
+            foreach (var cat in categories)
+            {
+                listGuid.Add(cat.Id.Value);
+                if(cat.Children.Count > 0) {
+                    BuildCategoryList(cat.Children, listGuid);
+                }
+            }
+
+            return listGuid;
+
         }
     }
 }
