@@ -1,13 +1,272 @@
-<div class="page-layout blank p-24" fusePerfectScrollbar>
-    <p>categories works!</p>
+<!-- <div id="cards" class="page-layout blank p-24" fusePerfectScrollbar> -->
+    <div id="cards" class="page-layout simple fullwidth">
+      
+    <!-- <p>categories works!</p>
 
     <pre>
-      {{category | json}}
-    </pre>
-
+      {{ category | json }}
+    </pre> -->
+    <!-- 
     <h2>Products</h2>
     <pre>
-      {{products | json}}
-    </pre>
+      {{ products | json }}
+    </pre> -->
 
+    <!-- HEADER -->
+    <div class="header accent p-24 h-160" fxLayout="row" fxLayoutAlign="space-between center">
+
+        <div fxLayout="column" fxLayoutAlign="center start">
+            <div fxLayout="row" fxLayoutAlign="start center">
+                <mat-icon class="secondary-text s-18">home</mat-icon>
+                <mat-icon class="secondary-text s-16">chevron_right</mat-icon>
+                <span class="secondary-text">User Interface</span>
+            </div>
+            <div class="h2 mt-16">Cards</div>
+        </div>
+
+        <div>
+            <mat-slide-toggle color="primary" (change)="toggleView()">
+                View Source
+            </mat-slide-toggle>
+        </div>
+
+    </div>
+    <!-- / HEADER -->
+
+
+    <div class="content" [ngClass]="this.view">
+        <div class="cards">
+            <!-- CARD 22 -->
+            <div class="card" *ngFor="let product of products">
+                <!-- PREVIEW -->
+                <div class="card-preview">
+                    <div class="fuse-card">
+                        <div
+                            class="p-16"
+                            fxLayout="row"
+                            fxLayoutAlign="space-between center"
+                        >
+                            <div class="pr-16">
+                                <div class="h1 font-weight-300">
+                                    {{product.title}}
+                                </div>
+                            </div>
+
+                            <div>
+                                <button
+                                    mat-icon-button
+                                    [matMenuTriggerFor]="card22Menu"
+                                    aria-label="more"
+                                >
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+
+                                <mat-menu #card22Menu="matMenu">
+                                    <button mat-menu-item (click)="editCat(product)">
+                                        <mat-icon>call_merge</mat-icon>
+                                        <span>Category edit</span>
+                                    </button>
+                                    <button mat-menu-item>
+                                        <mat-icon>notifications_off</mat-icon>
+                                        <span>Disable alerts</span>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+
+                        <mat-tab-group>
+                            <mat-tab label="1WEEK">
+                                <div class="p-16">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Nulla venenatis ante
+                                        augue. Phasellus volutpat neque ac dui
+                                        mattis vulputate. Etiam consequat
+                                        aliquam cursus. In sodales pretium
+                                        ultrices.
+                                    </p>
+                                    <p>
+                                        Maecenas lectus est, sollicitudin
+                                        consectetur felis nec, feugiat ultricies
+                                        mi. Aliquam erat volutpat. Nam placerat,
+                                        tortor in ultrices porttitor, orci enim
+                                        rutrum enim, vel tempor sapien arcu a
+                                        tellus.
+                                    </p>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Nulla venenatis ante
+                                        augue. Phasellus volutpat neque ac dui
+                                        mattis vulputate. Etiam consequat
+                                        aliquam cursus. In sodales pretium
+                                        ultrices.
+                                    </p>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="2WEEKS">
+                                <div class="p-16">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Nulla venenatis ante
+                                        augue. Phasellus volutpat neque ac dui
+                                        mattis vulputate. Etiam consequat
+                                        aliquam cursus. In sodales pretium
+                                        ultrices.
+                                    </p>
+                                    <p>
+                                        Maecenas lectus est, sollicitudin
+                                        consectetur felis nec, feugiat ultricies
+                                        mi. Aliquam erat volutpat. Nam placerat,
+                                        tortor in ultrices porttitor, orci enim
+                                        rutrum enim, vel tempor sapien arcu a
+                                        tellus.
+                                    </p>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Nulla venenatis ante
+                                        augue. Phasellus volutpat neque ac dui
+                                        mattis vulputate. Etiam consequat
+                                        aliquam cursus. In sodales pretium
+                                        ultrices.
+                                    </p>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="3WEEKS">
+                                <div class="p-16">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Nulla venenatis ante
+                                        augue. Phasellus volutpat neque ac dui
+                                        mattis vulputate. Etiam consequat
+                                        aliquam cursus. In sodales pretium
+                                        ultrices.
+                                    </p>
+                                    <p>
+                                        Maecenas lectus est, sollicitudin
+                                        consectetur felis nec, feugiat ultricies
+                                        mi. Aliquam erat volutpat. Nam placerat,
+                                        tortor in ultrices porttitor, orci enim
+                                        rutrum enim, vel tempor sapien arcu a
+                                        tellus.
+                                    </p>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipiscing elit. Nulla venenatis ante
+                                        augue. Phasellus volutpat neque ac dui
+                                        mattis vulputate. Etiam consequat
+                                        aliquam cursus. In sodales pretium
+                                        ultrices.
+                                    </p>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                </div>
+                <!-- / PREVIEW -->
+
+                <!-- SOURCE -->
+                <div class="card-source" fxHide fxShow.gt-sm>
+
+            <fuse-highlight lang="html">
+                <textarea #source>
+
+                    <div class="fuse-card">
+
+                        <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+                            <div class="pr-16">
+                                <div class="h1 font-weight-300">something</div>
+                            </div>
+
+                            <div>
+                                <button mat-icon-button [matMenuTriggerFor]="card22Menu" aria-label="more">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+
+                                <mat-menu #card22Menu="matMenu">
+                                    <button mat-menu-item>
+                                        <mat-icon>history</mat-icon>
+                                        <span>History</span>
+                                    </button>
+                                    <button mat-menu-item>
+                                        <mat-icon>notifications_off</mat-icon>
+                                        <span>Disable alerts</span>
+                                    </button>
+                                </mat-menu>
+                            </div>
+                        </div>
+
+                        <mat-tab-group>
+                            <mat-tab label="1WEEK">
+                                <div class="p-16">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis
+                                        ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam
+                                        consequat aliquam cursus. In sodales pretium ultrices.
+                                    </p>
+                                    <p>
+                                        Maecenas lectus est, sollicitudin consectetur felis nec, feugiat
+                                        ultricies mi. Aliquam erat volutpat. Nam placerat, tortor in ultrices
+                                        porttitor, orci enim rutrum enim, vel tempor sapien arcu a tellus.
+                                    </p>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis
+                                        ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam
+                                        consequat aliquam cursus. In sodales pretium ultrices.
+                                    </p>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="2WEEKS">
+                                <div class="p-16">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis
+                                        ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam
+                                        consequat aliquam cursus. In sodales pretium ultrices.
+                                    </p>
+                                    <p>
+                                        Maecenas lectus est, sollicitudin consectetur felis nec, feugiat
+                                        ultricies mi. Aliquam erat volutpat. Nam placerat, tortor in ultrices
+                                        porttitor, orci enim rutrum enim, vel tempor sapien arcu a tellus.
+                                    </p>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis
+                                        ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam
+                                        consequat aliquam cursus. In sodales pretium ultrices.
+                                    </p>
+                                </div>
+                            </mat-tab>
+
+                            <mat-tab label="3WEEKS">
+                                <div class="p-16">
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis
+                                        ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam
+                                        consequat aliquam cursus. In sodales pretium ultrices.
+                                    </p>
+                                    <p>
+                                        Maecenas lectus est, sollicitudin consectetur felis nec, feugiat
+                                        ultricies mi. Aliquam erat volutpat. Nam placerat, tortor in ultrices
+                                        porttitor, orci enim rutrum enim, vel tempor sapien arcu a tellus.
+                                    </p>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis
+                                        ante augue. Phasellus volutpat neque ac dui mattis vulputate. Etiam
+                                        consequat aliquam cursus. In sodales pretium ultrices.
+                                    </p>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+
+                    </div>
+
+                </textarea>
+            </fuse-highlight>
+        </div>
+                <!-- / SOURCE -->
+            </div>
+            <!-- / CARD 22 -->
+        </div>
+    </div>
 </div>

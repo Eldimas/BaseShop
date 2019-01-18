@@ -121,6 +121,7 @@ $typography: mat-typography-config(
 // @import "src/app/main/pages/knowledge-base/knowledge-base.theme";
 
 // @import "src/app/main/ui/cards/cards.theme";
+@import "src/app/main/categories/cards.theme";
 
 // @import "src/app/main/angular-material-elements/example-viewer/example-viewer.theme";
 
@@ -173,7 +174,7 @@ $typography: mat-typography-config(
     // @include knowledge-base-theme($theme);
 
     // UI
-    // @include ui-cards-theme($theme);
+     @include ui-cards-theme($theme);
 
     // Example Viewer
     // @include example-viewer-theme($theme);
