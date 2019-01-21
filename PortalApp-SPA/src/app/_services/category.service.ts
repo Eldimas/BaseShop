@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { createHttpObservable } from 'app/utils/util';
 import { HttpClient } from '@angular/common/http';
+import { Category } from 'app/_models/category';
+import { Observable } from 'rxjs';
+import { Product } from 'app/main/products/product.model';
 
 @Injectable({
     providedIn: 'root'
@@ -16,13 +19,13 @@ export class CategoryService {
         );
     }
 
-    getCategory(lang: string, id: string): any {
+    getCategory(lang: string, id: string): Observable<Category> {
         return createHttpObservable(
             this.baseUrl + `getCategory/${lang}/${id}`
         );
     }
 
-    getProductsByCategoryId(lang: string, id: string): any {
+    getProductsByCategoryId(lang: string, id: string): Observable<Product[]> {
         return createHttpObservable(
             this.baseUrl + `getProductsByCategoryId/${lang}/${id}`
         ); 

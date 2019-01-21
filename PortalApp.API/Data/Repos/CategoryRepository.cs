@@ -123,8 +123,10 @@ namespace PortalApp.API.Data.Repos
             }
 
             
-            var catProdList = await _context.CategoryProduct.Where(x => listGuid.Contains(x.Category.Id.Value))
+            var catProdList = await _context.CategoryProduct
+            .Where(x => listGuid.Contains(x.Category.Id.Value))
             .Include(x => x.Product)
+            // .Include(x => x.Category)
             .Select(x=> x.Product)
             .ToListAsync();
 
