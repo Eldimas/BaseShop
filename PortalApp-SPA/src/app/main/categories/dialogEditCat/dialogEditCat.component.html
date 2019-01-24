@@ -1,30 +1,42 @@
-
 <div style="float: right;">
-  <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="newProduct.title" cdkFocusInitial>
-      Save
-  </button>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button [mat-dialog-close]="newProduct.title" cdkFocusInitial>
+        Save
+    </button>
 </div>
 <h1 mat-dialog-title>Hi {{ data.title }}</h1>
-
 
 <div mat-dialog-content>
     <mat-tab-group>
         <mat-tab label="Content">
-            <mat-form-field>
-                <input matInput [(ngModel)]="newProduct.title" />
-            </mat-form-field>
+            <div class="example-container">
+                <mat-form-field>
+                    <input
+                        matInput
+                        placeholder="Title"
+                        [(ngModel)]="newProduct.title"
+                    />
+                </mat-form-field>
+                <mat-form-field>
+                    <input
+                        matInput
+                        placeholder="Price"
+                        [(ngModel)]="newProduct.price"
+                    />
+                </mat-form-field>
+            </div>
         </mat-tab>
         <mat-tab label="Categories">
-            <pre>
+            <app-categories-edit></app-categories-edit>
+            
+            <!-- <pre>
                 {{ data.categories | json }}
-              </pre
+              </pre -->
             >
         </mat-tab>
         <mat-tab label="Images"> Content 3 </mat-tab>
     </mat-tab-group>
 </div>
-
 
 <!-- <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">No Thanks</button>

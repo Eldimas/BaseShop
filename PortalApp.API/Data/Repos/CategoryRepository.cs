@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PortalApp.API.Dtos;
 using PortalApp.API.Models;
 
 namespace PortalApp.API.Data.Repos
@@ -52,7 +53,7 @@ namespace PortalApp.API.Data.Repos
                 .ThenInclude(x => x.Children)
             .ToListAsync<Category>();
 
-            
+
             // var allCategories = await _context.Categories.Include(x => x.Children).ToListAsync<Category>();
 
             // var allCategories = await _context.Categories.ToListAsync<Category>();
@@ -60,7 +61,7 @@ namespace PortalApp.API.Data.Repos
             // foreach (var cat in allCategories)
             // {
             //     if(cat.Children == null || cat.Children.Count == 0){
-                  
+
             //        cat.Type = "item";
 
             //     } else {
@@ -104,54 +105,186 @@ namespace PortalApp.API.Data.Repos
             return category;
         }
 
-        public async Task<IEnumerable<Product>> GetProductByCategoryId(string lang, Guid id)
+        public async Task<IEnumerable<ProductForUpdateDto>> GetProductByCategoryId(string lang, Guid id)
         {
-             var mainCategory = await _context.Categories
-            .Include(x => x.Children)
-                .ThenInclude(x => x.Children)
-                .ThenInclude(x => x.Children)
-                .ThenInclude(x => x.Children)
-                .ThenInclude(x => x.Children)
-                .ThenInclude(x => x.Children)
-                .ThenInclude(x => x.Children)
-            .FirstOrDefaultAsync(x => x.Id == id);
+            var mainCategory = await _context.Categories
+           .Include(x => x.Children)
+               .ThenInclude(x => x.Children)
+               .ThenInclude(x => x.Children)
+               .ThenInclude(x => x.Children)
+               .ThenInclude(x => x.Children)
+               .ThenInclude(x => x.Children)
+               .ThenInclude(x => x.Children)
+           .FirstOrDefaultAsync(x => x.Id == id);
 
             var listGuid = new List<Guid>();
             listGuid.Add(mainCategory.Id.Value);
-            if(mainCategory.Children.Count > 0) {
+            if (mainCategory.Children.Count > 0)
+            {
                 listGuid = BuildCategoryList(mainCategory.Children, listGuid);
             }
 
-            
+            // var catProdList = await _context.CategoryProduct
+            // .Where(x => listGuid.Contains(x.Category.Id.Value))
+            // .Include(x => x.Product)
+            // //.Include(x => x.Category)
+            // .Select(x=> x.Product)
+            // .ToListAsync();
+
+
             var catProdList = await _context.CategoryProduct
             .Where(x => listGuid.Contains(x.Category.Id.Value))
             .Include(x => x.Product)
-            // .Include(x => x.Category)
-            .Select(x=> x.Product)
+            .Include(x => x.Category)
+            //.Select(x=> x.Product)
             .ToListAsync();
 
-            var prodList = new List<Product>();
+            // var prodList = new List<Product>();
+            // foreach (var prod in catProdList)
+            // {
+            //     if(!prodList.Contains(prod)) {
+            //         prodList.Add(prod);
+            //     }
+            // }
+
+            var prodIds = new List<Guid>();
+
+            var prodForUpdateList = new List<ProductForUpdateDto>();
+
             foreach (var prod in catProdList)
             {
-                if(!prodList.Contains(prod)) {
-                    prodList.Add(prod);
-                }
+              if(!prodIds.Contains(prod.ProductId)) {
+
+                  prodIds.Add(prod.Product.Id);
+
+                  var prodForUpdate = new ProductForUpdateDto(){
+                      Id = prod.Product.Id,
+                      Title = prod.Product.Title,
+                      Description = prod.Product.Description,
+                      Price = prod.Product.Price,
+                      Categories = new List<CategoryForUpdateProductDto>()
+                  };
+
+                  var cats = catProdList
+                    .Where(x => x.ProductId == prodForUpdate.Id)
+                    .Select(x => x.Category)
+                    .ToList();
+
+                    foreach (var cat in cats)
+                    {
+                        var catForUpdateProduct = new CategoryForUpdateProductDto() {
+                            Id = cat.Id,
+                            Title = cat.Title,
+                            Type = cat.Type,
+                            Icon = cat.Icon,
+                            Url = cat.Url,
+                            TitleEng = cat.TitleEng,
+                            TitleKaz = cat.TitleKaz
+                        };
+                        prodForUpdate.Categories.Add(catForUpdateProduct);
+                    }
+
+
+                    prodForUpdateList.Add(prodForUpdate);
+              }  
             }
 
+            return prodForUpdateList;
 
 
-            return prodList;
+            // var prodList = new List<ProductForUpdateDto>();
+            // foreach (var prod in catProdList)
+            // {
+            //     var product = new ProductForUpdateDto();
+            //     product.Id = prod.Product.Id;
+            //     product.Title = prod.Product.Title;
+            //     product.Price = prod.Product.Price;
+
+               
+            //     if (prodList.Count > 0)
+            //     {
+            //         foreach (var pr in prodList)
+            //         {
+            //             if (pr.Id == prod.Product.Id)
+            //             {
+            //                 var isExistCat = false;
+            //                 if(product.Categories == null) {
+            //                     product.Categories = new List<Category>();
+            //                 }
+            //                 foreach (var cat in product.Categories)
+            //                 {
+            //                     if (cat.Id == prod.Category.Id)
+            //                     {
+            //                         isExistCat = true;
+            //                         // break;
+            //                     }
+            //                 }
+
+            //                 if (!isExistCat)
+            //                 {
+            //                     product.Categories.Add(prod.Category);
+            //                 }
+            //             }
+            //             else
+            //             {
+            //                 product.Categories = new List<Category>();
+            //                 product.Categories.Add(prod.Category);
+
+            //                 prodList.Add(product);
+            //             }
+            //         }
+            //     } 
+            //     // else
+            //     // {
+            //     //       product.Categories = new List<Category>();
+            //     //             product.Categories.Add(prod.Category);
+
+            //     //             prodList.Add(product);
+            //     // }
+
+
+            //     // if (!prodList.Contains(product))
+            //     // {
+            //     //     product.Categories = new List<Category>();
+            //     //     product.Categories.Add(prod.Category);
+
+            //     //     prodList.Add(product);
+            //     // }
+            //     // else
+            //     // {
+            //     //     // var cat = prod.Category;
+            //     //     var isExistCat = false;
+            //     //     foreach (var cat in product.Categories)
+            //     //     {
+            //     //         if (cat.Id == prod.Category.Id)
+            //     //         {
+            //     //             isExistCat = true;
+            //     //             break;
+            //     //         }
+            //     //     }
+
+            //     //     if (!isExistCat)
+            //     //     {
+            //     //         product.Categories.Add(prod.Category);
+            //     //     }
+
+            //     // }
+            // }
+
+            // return prodList;
 
 
         }
-        
-        private List<Guid> BuildCategoryList(IEnumerable<Category> categories, List<Guid> listGuid) {
-            
-            
+
+        private List<Guid> BuildCategoryList(IEnumerable<Category> categories, List<Guid> listGuid)
+        {
+
+
             foreach (var cat in categories)
             {
                 listGuid.Add(cat.Id.Value);
-                if(cat.Children.Count > 0) {
+                if (cat.Children.Count > 0)
+                {
                     BuildCategoryList(cat.Children, listGuid);
                 }
             }

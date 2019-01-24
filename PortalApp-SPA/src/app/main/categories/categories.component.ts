@@ -45,7 +45,7 @@ export class CategoriesComponent implements OnInit {
             this._categoryService.getCategory('ru', this.id).subscribe(res => {
                 this.category = res;
                 this.categoryTitle = this.category.title;
-                console.log('Categoryy: ', res);
+                // console.log('Categoryy: ', res);
                 
             });
 
