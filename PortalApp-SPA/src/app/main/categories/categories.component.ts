@@ -81,7 +81,7 @@ export class CategoriesComponent implements OnInit {
     editProduct(product: Product, isNew: boolean): void {
         const dialogRef = this.dialog.open(DialogEditCatComponent, {
             width: '750px',
-            height: '600px',
+            height: '700px',
             data: product
           });
       

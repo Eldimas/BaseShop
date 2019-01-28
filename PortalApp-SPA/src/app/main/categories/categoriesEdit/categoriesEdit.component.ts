@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Injectable } from '@angular/core';
+import { Component, Injectable, AfterViewInit, Input } from '@angular/core';
 import {
     MatTreeFlatDataSource,
     MatTreeFlattener
@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { CategoryService } from 'app/_services/category.service';
 import { Category } from 'app/_models/category';
 import { CategoryUpdate } from 'app/_models/categoryUpdate.model';
+import { CastExpr } from '@angular/compiler';
 
 /**
  * Node for to-do item
@@ -119,9 +120,12 @@ export class ChecklistDatabaseTwo {
                     );
                 } else {
                     node.title = value.title;
+                    if (node.title === 'Category_1_1') {
+                      node.selected = true;
+                    }
                 }
             }
-            // console.log('accumulator.concat(node): ', accumulator.concat(node));
+            console.log('accumulator.concat(node): ', accumulator.concat(node));
 
             return accumulator.concat(node);
         }, []);
@@ -154,9 +158,16 @@ export class ChecklistDatabaseTwo {
 @Component({
     selector: 'app-categories-edit',
     templateUrl: './categoriesEdit.component.html',
-    styleUrls: ['./categoriesEdit.component.scss']
+    styleUrls: ['./categoriesEdit.component.scss'],
+    // providers: [ChecklistDatabaseTwo]
 })
-export class CategoriesEditComponent {
+export class CategoriesEditComponent  implements AfterViewInit {
+
+    @Input() cats = [];
+    isSelectCat = false;
+    isExistInCats = false;
+    catsForUpdate = [];
+    
     /** Map from flat node to nested node. This helps us finding the nested node to be modified */
     flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
 
@@ -179,6 +190,31 @@ export class CategoriesEditComponent {
     checklistSelection = new SelectionModel<TodoItemFlatNode>(
         true /* multiple */
     );
+
+    // tslint:disable-next-line:typedef
+    ngAfterViewInit() {
+        this.cats.forEach(cat => {
+
+            for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+                if (this.treeControl.dataNodes[i].id === cat.id) {
+                  this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
+                  this.treeControl.expand(this.treeControl.dataNodes[i]);
+                  this.database.dataChange.next(this.database.data);
+                }
+              }
+            
+        });
+
+        // for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+        //   if (this.treeControl.dataNodes[i].title === 'Category_1_1') {
+        //     this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
+        //     this.treeControl.expand(this.treeControl.dataNodes[i]);
+        //     this.database.dataChange.next(this.database.data);
+        //   }
+        // }
+        
+        // 
+      }
 
     constructor(
         private database: ChecklistDatabaseTwo,
@@ -206,7 +242,11 @@ export class CategoriesEditComponent {
         database.dataChange.subscribe(data => {
             this.dataSource.data = data;
         });
+
+        this.treeControl.expandAll();
     }
+
+    
 
     getLevel = (node: TodoItemFlatNode) => node.level;
 
@@ -270,24 +310,133 @@ export class CategoriesEditComponent {
 
     /** Toggle the to-do item selection. Select/deselect all the descendants node */
     todoItemSelectionToggle(node: TodoItemFlatNode): void {
+        
+       // this.cats.push(node);
+
         this.checklistSelection.toggle(node);
         const descendants = this.treeControl.getDescendants(node);
         this.checklistSelection.isSelected(node)
             ? this.checklistSelection.select(...descendants)
             : this.checklistSelection.deselect(...descendants);
 
+        // this.isSelectCat = this.checklistSelection.isSelected(node);
+        // if (this.isSelectCat) {
+            
+        //     // alert(`add cat ${node.id}`);
+        //     this.isExistInCats = false;
+        //     this.cats.forEach(cat => {
+        //         if (node.id === cat.id) {
+        //             this.isExistInCats = true;
+        //         }
+                
+        //     });
+
+        //     if (!this.isExistInCats) {
+        //             this.cats.push(node);
+        //     }
+
+        // } else {
+        //     // alert(`remove cat ${node.id}`);
+        //     this.isExistInCats = false;
+        //     this.cats.forEach(cat => {
+        //         if (node.id === cat.id) {
+        //             this.isExistInCats = true;
+        //         }
+                
+        //     });
+
+        //     if (this.isExistInCats) {
+        //         // this.cats.push(node);
+        //         for (let i = 0; i < this.cats.length; i++) {
+        //             const cat = this.cats[i];
+        //             if (cat.id === node.id) {
+        //                 this.cats.splice(i, 1);
+        //             }
+                    
+        //         }
+        //     }
+
+        // }
+
+        this.updateCats(node);
+
         // Force update for the parent
         descendants.every(child => this.checklistSelection.isSelected(child));
         this.checkAllParentsSelection(node);
+        
+    }
+
+    updateCats(node: TodoItemFlatNode): void {
+        this.isSelectCat = this.checklistSelection.isSelected(node);
+        if (this.isSelectCat) {
+            
+            // alert(`add cat ${node.id}`);
+            this.isExistInCats = false;
+            this.cats.forEach(cat => {
+                if (node.id === cat.id) {
+                    this.isExistInCats = true;
+                }
+                
+            });
+
+            if (!this.isExistInCats) {
+                    this.cats.push(node);
+            }
+
+        } else {
+            // alert(`remove cat ${node.id}`);
+            this.isExistInCats = false;
+            this.cats.forEach(cat => {
+                if (node.id === cat.id) {
+                    this.isExistInCats = true;
+                }
+                
+            });
+
+            if (this.isExistInCats) {
+                // this.cats.push(node);
+                for (let i = 0; i < this.cats.length; i++) {
+                    const cat = this.cats[i];
+                    if (cat.id === node.id) {
+                        this.cats.splice(i, 1);
+                    }
+                    
+                }
+            }
+
+        }
+    }
+
+    saveCat(): void {
+        this.catsForUpdate = [];
+        for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+            // if (this.treeControl.dataNodes[i].id === cat.id) {
+            //   this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
+            //   this.treeControl.expand(this.treeControl.dataNodes[i]);
+            //   this.database.dataChange.next(this.database.data);
+            // }
+
+            if (this.checklistSelection.isSelected(this.treeControl.dataNodes[i])) {
+                this.catsForUpdate.push(this.treeControl.dataNodes[i].id);
+            }
+          }
     }
 
     checkNodeSelectionFromDb(node: TodoItemFlatNode): boolean {
         if (node.title === 'Category_1_1') {
+
+          this.checklistSelection.toggle(node);
+          this.checkAllParentsSelection(node);
+        //  const isS = this.checklistSelection.isSelected(node);
+        //  if (!isS) {
+        //   this.checklistSelection.select(node);
+        //   this.checkAllParentsSelection(node);
+        //  }
           
-          const descendants = this.treeControl.getDescendants(node);
-          this.checklistSelection.isSelected(node)
-          ? this.checklistSelection.select(...descendants)
-          : this.checklistSelection.deselect(...descendants);
+          // const descendants = this.treeControl.getDescendants(node);
+          // this.checklistSelection.isSelected(node)
+          // ? this.checklistSelection.select(...descendants)
+          // : this.checklistSelection.deselect(...descendants);
 
           // Force update for the parent
         // descendants.every(child => this.checklistSelection.isSelected(child));
@@ -301,6 +450,8 @@ export class CategoriesEditComponent {
     todoLeafItemSelectionToggle(node: TodoItemFlatNode): void {
         this.checklistSelection.toggle(node);
         this.checkAllParentsSelection(node);
+
+        this.updateCats(node);
     }
 
     /* Checks all the parents when a leaf node is selected/unselected */
