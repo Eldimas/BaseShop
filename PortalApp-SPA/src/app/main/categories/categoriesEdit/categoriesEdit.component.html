@@ -120,13 +120,13 @@
             </button>
         </mat-tree-node>
     </mat-tree>
-    <h1>{{ isSelectCat }}</h1>
+    <!-- <h1>{{ isSelectCat }}</h1> -->
     <pre>
       {{ catsForUpdate | json }}
     </pre>
 
     <!-- <button mat-button (click)='saveCat()'>Save Cat</button> -->
-    <button (click)="saveCat()" mat-raised-button color="accent">
+    <button (click)="saveCats(productId)" mat-raised-button color="accent">
       <mat-icon>save</mat-icon>
       Сохранить
   </button>

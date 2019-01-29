@@ -27,7 +27,7 @@
             </div>
         </mat-tab>
         <mat-tab label="Categories">
-            <app-categories-edit [cats]='data.categories'></app-categories-edit>
+            <app-categories-edit [productId]='newProduct.id'  [cats]='data.categories'></app-categories-edit>
             
             <!-- <pre>
                 {{ data.categories | json }}

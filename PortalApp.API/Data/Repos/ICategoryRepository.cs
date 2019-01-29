@@ -12,5 +12,7 @@ namespace PortalApp.API.Data.Repos
          Task<Category> GetCategoryByLangById(string lang, Guid id);
 
          Task<IEnumerable<ProductForUpdateDto>> GetProductByCategoryId(string lang, Guid id);
+
+         void UpdateCategoryInProduct(CategoryProductUpdateDto categoryProduct);
     }
 }

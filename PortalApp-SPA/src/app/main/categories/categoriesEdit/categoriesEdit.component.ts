@@ -164,6 +164,7 @@ export class ChecklistDatabaseTwo {
 export class CategoriesEditComponent  implements AfterViewInit {
 
     @Input() cats = [];
+    @Input() productId = '';
     isSelectCat = false;
     isExistInCats = false;
     catsForUpdate = [];
@@ -407,7 +408,9 @@ export class CategoriesEditComponent  implements AfterViewInit {
         }
     }
 
-    saveCat(): void {
+    saveCats(productId: string): void {
+        
+        
         this.catsForUpdate = [];
         for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
             // if (this.treeControl.dataNodes[i].id === cat.id) {
@@ -420,6 +423,12 @@ export class CategoriesEditComponent  implements AfterViewInit {
                 this.catsForUpdate.push(this.treeControl.dataNodes[i].id);
             }
           }
+
+          this._categoryService.updateCategoryInProduct(productId, this.catsForUpdate)
+          .subscribe(res => {
+                console.log(res);
+
+          });
     }
 
     checkNodeSelectionFromDb(node: TodoItemFlatNode): boolean {

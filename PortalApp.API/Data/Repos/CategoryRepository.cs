@@ -12,10 +12,12 @@ namespace PortalApp.API.Data.Repos
     public class CategoryRepository : ICategoryRepository
     {
         private readonly DataContext _context;
+        // private readonly PortalRepository _portalRepository;
 
         public CategoryRepository(DataContext context)
         {
             _context = context;
+            // _portalRepository = portalRepository;
         }
         public async Task<IEnumerable<Category>> GetCategoriesByLang(string lang)
         {
@@ -274,6 +276,38 @@ namespace PortalApp.API.Data.Repos
             // return prodList;
 
 
+        }
+
+        public void  UpdateCategoryInProduct(CategoryProductUpdateDto categoryProduct)
+        {
+            // текущие категории продукта из базы
+            var catProds = _context.CategoryProduct
+                .Where(x=>x.ProductId == categoryProduct.ProductId)
+                .ToList();
+
+            var listForDelete = new List<Guid>();
+            // цикл по новым категориям продукта
+            foreach (var cat in categoryProduct.Categories)
+            {
+                var isExist = catProds.FirstOrDefault(x => x.CategoryId == cat) != null ? true: false;
+                
+                if(!isExist) {
+                    var catProdModel = new CategoryProduct();
+                    // catProdModel.CategoryId = cat;
+                    // catProdModel.ProductId = categoryProduct.ProductId;
+
+                    catProdModel.Category = _context.Categories.FirstOrDefault(x => x.Id == cat);
+                    catProdModel.Product = _context.Products.FirstOrDefault(x => x.Id == categoryProduct.ProductId);
+
+
+
+                    _context.CategoryProduct.Add(catProdModel);
+                    // _portalRepository.Add<CategoryProduct>(catProdModel);
+                }
+
+                // await _portalRepository.SaveAll();
+                 _context.SaveChanges();
+            }
         }
 
         private List<Guid> BuildCategoryList(IEnumerable<Category> categories, List<Guid> listGuid)

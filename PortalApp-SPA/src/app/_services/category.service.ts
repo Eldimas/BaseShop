@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Category } from 'app/_models/category';
 import { Observable } from 'rxjs';
 import { Product } from 'app/main/products/product.model';
+import { CategoryProductUpdate } from 'app/_models/categoryProductUpdate.model';
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +30,25 @@ export class CategoryService {
         return createHttpObservable(
             this.baseUrl + `getProductsByCategoryId/${lang}/${id}`
         ); 
+    }
+
+    // tslint:disable-next-line:typedef
+    updateCategoryInProduct(productId: string, categories: string[]) {
+        // console.log(`ProductId: ${productId}`);
+        const catProd = new CategoryProductUpdate(
+            {
+                productId: productId,
+                categories: categories
+            }
+        );
+        // catProd.productId = productId;
+        // catProd.categories = categories;
+
+
+        console.log(categories);
+        console.log('URLurl: ', this.baseUrl + `updateCategoryInProduct/${productId}`);
+        
+      return  this.http.post(this.baseUrl + 'updateCategoryInProduct/', catProd);
     }
 
 
