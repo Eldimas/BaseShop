@@ -32,6 +32,12 @@ export class CategoryService {
         ); 
     }
 
+    getCategoriesByProductId(id: string): Observable<Category[]> {
+        return createHttpObservable(
+            this.baseUrl + `getCategoriesByProductId/${id}`
+        ); 
+    }
+
     // tslint:disable-next-line:typedef
     updateCategoryInProduct(productId: string, categories: string[]) {
         // console.log(`ProductId: ${productId}`);

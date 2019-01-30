@@ -121,7 +121,7 @@ export class ChecklistDatabaseTwo {
                 } else {
                     node.title = value.title;
                     if (node.title === 'Category_1_1') {
-                      node.selected = true;
+                        node.selected = true;
                     }
                 }
             }
@@ -158,17 +158,16 @@ export class ChecklistDatabaseTwo {
 @Component({
     selector: 'app-categories-edit',
     templateUrl: './categoriesEdit.component.html',
-    styleUrls: ['./categoriesEdit.component.scss'],
+    styleUrls: ['./categoriesEdit.component.scss']
     // providers: [ChecklistDatabaseTwo]
 })
-export class CategoriesEditComponent  implements AfterViewInit {
-
+export class CategoriesEditComponent implements AfterViewInit {
     @Input() cats = [];
-    @Input() productId = '';
+    @Input() productId: string;
     isSelectCat = false;
     isExistInCats = false;
     catsForUpdate = [];
-    
+
     /** Map from flat node to nested node. This helps us finding the nested node to be modified */
     flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
 
@@ -194,17 +193,32 @@ export class CategoriesEditComponent  implements AfterViewInit {
 
     // tslint:disable-next-line:typedef
     ngAfterViewInit() {
-        this.cats.forEach(cat => {
+        this._categoryService
+            .getCategoriesByProductId(this.productId)
+            .subscribe(res => {
+                this.cats = res;
 
-            for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
-                if (this.treeControl.dataNodes[i].id === cat.id) {
-                  this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
-                  this.treeControl.expand(this.treeControl.dataNodes[i]);
-                  this.database.dataChange.next(this.database.data);
-                }
-              }
-            
-        });
+                this.cats.forEach(cat => {
+                    for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+                        if (this.treeControl.dataNodes[i].id === cat.id) {
+                            
+                            // this.todoItemSelectionToggle(
+                            //     this.treeControl.dataNodes[i]
+                            // );
+
+                            this.todoItemSelectionSelect(
+                                this.treeControl.dataNodes[i]
+                            );
+
+                            this.treeControl.expand(
+                                this.treeControl.dataNodes[i]
+                            );
+
+                            this.database.dataChange.next(this.database.data);
+                        }
+                    }
+                });
+            });
 
         // for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
         //   if (this.treeControl.dataNodes[i].title === 'Category_1_1') {
@@ -213,9 +227,9 @@ export class CategoriesEditComponent  implements AfterViewInit {
         //     this.database.dataChange.next(this.database.data);
         //   }
         // }
-        
-        // 
-      }
+
+        //
+    }
 
     constructor(
         private database: ChecklistDatabaseTwo,
@@ -225,6 +239,11 @@ export class CategoriesEditComponent  implements AfterViewInit {
         private _fuseNavigationService: FuseNavigationService,
         private _translateService: TranslateService
     ) {
+        // _categoryService.getCategoriesByProductId(this.productId)
+        //     .subscribe(res => {
+        //         this.cats = res;
+        //     });
+
         this.treeFlattener = new MatTreeFlattener(
             this.transformer,
             this.getLevel,
@@ -246,8 +265,6 @@ export class CategoriesEditComponent  implements AfterViewInit {
 
         this.treeControl.expandAll();
     }
-
-    
 
     getLevel = (node: TodoItemFlatNode) => node.level;
 
@@ -294,7 +311,7 @@ export class CategoriesEditComponent  implements AfterViewInit {
     /** Whether all the descendants of the node are selected. */
     descendantsAllSelected(node: TodoItemFlatNode): boolean {
         const descendants = this.treeControl.getDescendants(node);
-        const descAllSelected = descendants.every(child => 
+        const descAllSelected = descendants.every(child =>
             this.checklistSelection.isSelected(child)
         );
         return descAllSelected;
@@ -309,10 +326,23 @@ export class CategoriesEditComponent  implements AfterViewInit {
         return result && !this.descendantsAllSelected(node);
     }
 
+    todoItemSelectionSelect(node: TodoItemFlatNode): void {
+      const isSelected =  this.checklistSelection.isSelected(node);
+      if (!isSelected) {
+        const descendants = this.treeControl.getDescendants(node);
+        this.checklistSelection.toggle(node);
+        this.checklistSelection.select(...descendants);
+        this.updateCats(node);
+
+        // Force update for the parent
+        descendants.every(child => this.checklistSelection.isSelected(child));
+        this.checkAllParentsSelection(node);
+      }
+    }
+
     /** Toggle the to-do item selection. Select/deselect all the descendants node */
     todoItemSelectionToggle(node: TodoItemFlatNode): void {
-        
-       // this.cats.push(node);
+        // this.cats.push(node);
 
         this.checklistSelection.toggle(node);
         const descendants = this.treeControl.getDescendants(node);
@@ -322,14 +352,14 @@ export class CategoriesEditComponent  implements AfterViewInit {
 
         // this.isSelectCat = this.checklistSelection.isSelected(node);
         // if (this.isSelectCat) {
-            
+
         //     // alert(`add cat ${node.id}`);
         //     this.isExistInCats = false;
         //     this.cats.forEach(cat => {
         //         if (node.id === cat.id) {
         //             this.isExistInCats = true;
         //         }
-                
+
         //     });
 
         //     if (!this.isExistInCats) {
@@ -343,7 +373,7 @@ export class CategoriesEditComponent  implements AfterViewInit {
         //         if (node.id === cat.id) {
         //             this.isExistInCats = true;
         //         }
-                
+
         //     });
 
         //     if (this.isExistInCats) {
@@ -353,7 +383,7 @@ export class CategoriesEditComponent  implements AfterViewInit {
         //             if (cat.id === node.id) {
         //                 this.cats.splice(i, 1);
         //             }
-                    
+
         //         }
         //     }
 
@@ -364,26 +394,22 @@ export class CategoriesEditComponent  implements AfterViewInit {
         // Force update for the parent
         descendants.every(child => this.checklistSelection.isSelected(child));
         this.checkAllParentsSelection(node);
-        
     }
 
     updateCats(node: TodoItemFlatNode): void {
         this.isSelectCat = this.checklistSelection.isSelected(node);
         if (this.isSelectCat) {
-            
             // alert(`add cat ${node.id}`);
             this.isExistInCats = false;
             this.cats.forEach(cat => {
                 if (node.id === cat.id) {
                     this.isExistInCats = true;
                 }
-                
             });
 
             if (!this.isExistInCats) {
-                    this.cats.push(node);
+                this.cats.push(node);
             }
-
         } else {
             // alert(`remove cat ${node.id}`);
             this.isExistInCats = false;
@@ -391,7 +417,6 @@ export class CategoriesEditComponent  implements AfterViewInit {
                 if (node.id === cat.id) {
                     this.isExistInCats = true;
                 }
-                
             });
 
             if (this.isExistInCats) {
@@ -401,16 +426,12 @@ export class CategoriesEditComponent  implements AfterViewInit {
                     if (cat.id === node.id) {
                         this.cats.splice(i, 1);
                     }
-                    
                 }
             }
-
         }
     }
 
     saveCats(productId: string): void {
-        
-        
         this.catsForUpdate = [];
         for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
             // if (this.treeControl.dataNodes[i].id === cat.id) {
@@ -419,38 +440,41 @@ export class CategoriesEditComponent  implements AfterViewInit {
             //   this.database.dataChange.next(this.database.data);
             // }
 
-            if (this.checklistSelection.isSelected(this.treeControl.dataNodes[i])) {
+            if (
+                this.checklistSelection.isSelected(
+                    this.treeControl.dataNodes[i]
+                )
+            ) {
                 this.catsForUpdate.push(this.treeControl.dataNodes[i].id);
             }
-          }
+        }
 
-          this._categoryService.updateCategoryInProduct(productId, this.catsForUpdate)
-          .subscribe(res => {
+        this._categoryService
+            .updateCategoryInProduct(productId, this.catsForUpdate)
+            .subscribe(res => {
                 console.log(res);
-
-          });
+            });
     }
 
     checkNodeSelectionFromDb(node: TodoItemFlatNode): boolean {
         if (node.title === 'Category_1_1') {
+            this.checklistSelection.toggle(node);
+            this.checkAllParentsSelection(node);
+            //  const isS = this.checklistSelection.isSelected(node);
+            //  if (!isS) {
+            //   this.checklistSelection.select(node);
+            //   this.checkAllParentsSelection(node);
+            //  }
 
-          this.checklistSelection.toggle(node);
-          this.checkAllParentsSelection(node);
-        //  const isS = this.checklistSelection.isSelected(node);
-        //  if (!isS) {
-        //   this.checklistSelection.select(node);
-        //   this.checkAllParentsSelection(node);
-        //  }
-          
-          // const descendants = this.treeControl.getDescendants(node);
-          // this.checklistSelection.isSelected(node)
-          // ? this.checklistSelection.select(...descendants)
-          // : this.checklistSelection.deselect(...descendants);
+            // const descendants = this.treeControl.getDescendants(node);
+            // this.checklistSelection.isSelected(node)
+            // ? this.checklistSelection.select(...descendants)
+            // : this.checklistSelection.deselect(...descendants);
 
-          // Force update for the parent
-        // descendants.every(child => this.checklistSelection.isSelected(child));
-        // this.checkAllParentsSelection(node);
-        return true;
+            // Force update for the parent
+            // descendants.every(child => this.checklistSelection.isSelected(child));
+            // this.checkAllParentsSelection(node);
+            return true;
         }
         return false;
     }

@@ -97,6 +97,16 @@ namespace PortalApp.API.Data.Repos
             return rootCategories;
         }
 
+        public async Task<IEnumerable<Category>> GetCategoriesByProductId(Guid id)
+        {
+            var cats = await _context.CategoryProduct
+                .Where(x => x.ProductId == id)
+                .Include(x => x.Category)
+                .Select(x => x.Category)
+                .ToListAsync();
+                return cats;
+        }
+
         public async Task<Category> GetCategoryByLangById(string lang, Guid id)
         {
             var category = await _context.Categories
@@ -285,7 +295,38 @@ namespace PortalApp.API.Data.Repos
                 .Where(x=>x.ProductId == categoryProduct.ProductId)
                 .ToList();
 
+            // Удаляем категории
             var listForDelete = new List<Guid>();
+            foreach (var cat in catProds)
+            {
+                var cp = categoryProduct.Categories
+                    .FirstOrDefault(x => x == cat.CategoryId);
+
+                var isExist = categoryProduct.Categories
+                    .FirstOrDefault(x => x == cat.CategoryId) != Guid.Empty ? true : false;
+
+                if(!isExist) {
+                    //  var catProdModel = new CategoryProduct();
+                   
+                    // catProdModel.Category = _context.Categories
+                    //     .FirstOrDefault(x => x.Id == cat.CategoryId);
+                    // catProdModel.Product = _context.Products
+                    //     .FirstOrDefault(x => x.Id == categoryProduct.ProductId);
+                    var catProdModel = _context.CategoryProduct
+                        .FirstOrDefault(x => x.CategoryId == cat.CategoryId 
+                            && x.ProductId == categoryProduct.ProductId);
+                    
+                    if(catProdModel !=null ) {
+                        _context.CategoryProduct.Remove(catProdModel);
+                        _context.SaveChanges();
+                    }
+
+                    
+                }
+                
+            }
+
+            //Добавляем категории
             // цикл по новым категориям продукта
             foreach (var cat in categoryProduct.Categories)
             {

@@ -47,6 +47,14 @@ namespace PortalApp.API.Controllers
             return Ok(cat);
         }
 
+        
+        [HttpGet("getCategoriesByProductId/{id}")]
+        public async Task<IActionResult> GetCategoriesByProductId(Guid id)
+        {
+            var cats = await _catRepo.GetCategoriesByProductId(id);
+            return Ok(cats);
+        }
+
         [HttpPost("add")]
         public async Task<IActionResult> Add(CategoryUpdateDto categoryUpdateDto)
         {
