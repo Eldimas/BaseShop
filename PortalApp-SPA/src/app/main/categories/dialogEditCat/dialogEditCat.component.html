@@ -1,6 +1,6 @@
 <div style="float: right;">
     <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button [mat-dialog-close]="newProduct.title" cdkFocusInitial>
+    <button mat-button [mat-dialog-close]="newProduct" cdkFocusInitial>
         Save
     </button>
 </div>
@@ -27,8 +27,8 @@
             </div>
         </mat-tab>
         <mat-tab label="Categories">
-            
-            <app-categories-edit [productId]='newProduct.id'  [cats]='data.categories'></app-categories-edit>
+
+            <app-categories-edit [productId]='newProduct.id' ></app-categories-edit>
             
             <!-- <pre>
                 {{ data.categories | json }}

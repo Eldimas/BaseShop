@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, Injectable, AfterViewInit, Input } from '@angular/core';
+import { Component, Injectable, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import {
     MatTreeFlatDataSource,
     MatTreeFlattener
@@ -14,6 +14,7 @@ import { CategoryService } from 'app/_services/category.service';
 import { Category } from 'app/_models/category';
 import { CategoryUpdate } from 'app/_models/categoryUpdate.model';
 import { CastExpr } from '@angular/compiler';
+
 
 /**
  * Node for to-do item
@@ -162,11 +163,16 @@ export class ChecklistDatabaseTwo {
     // providers: [ChecklistDatabaseTwo]
 })
 export class CategoriesEditComponent implements AfterViewInit {
-    @Input() cats = [];
+    cats = [];
     @Input() productId: string;
+    
     isSelectCat = false;
     isExistInCats = false;
     catsForUpdate = [];
+
+
+   
+
 
     /** Map from flat node to nested node. This helps us finding the nested node to be modified */
     flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
@@ -430,6 +436,8 @@ export class CategoriesEditComponent implements AfterViewInit {
             }
         }
     }
+
+    
 
     saveCats(productId: string): void {
         this.catsForUpdate = [];

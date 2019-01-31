@@ -1,10 +1,22 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-    <button
+<div style="float: right">
+    <button (click)="saveCats(productId)" mat-raised-button color="primary">
+                <mat-icon>save</mat-icon>
+                Сохранить
+            </button>
+</div>
+        
+<div>
+     <button
         mat-button
         (click)="saveRootNode('new title', 'new titleEng', 'new titleKaz')"
-    >
-        Save root
+        mat-raised-button color="accent">
+        <mat-icon>add</mat-icon>
+        Root category
     </button>
+</div>
+   
+
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
         <!-- <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
         <button mat-icon-button disabled></button>
@@ -126,8 +138,5 @@
     </pre>
 
     <!-- <button mat-button (click)='saveCat()'>Save Cat</button> -->
-    <button (click)="saveCats(productId)" mat-raised-button color="accent">
-      <mat-icon>save</mat-icon>
-      Сохранить
-  </button>
+   
 </div>

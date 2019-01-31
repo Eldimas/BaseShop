@@ -85,12 +85,12 @@ export class CategoriesComponent implements OnInit {
             data: product
           });
       
-          dialogRef.afterClosed().subscribe(result => {
-            // console.log('The dialog was closed');
-            // console.log('resulttt: ', result);
+          dialogRef.afterClosed().subscribe(prod => {
+            console.log('The dialog was closed');
+            console.log('resulttt: ', prod);
           
-            if (result !== null && result !== undefined) {
-                product.title = result;
+            if (prod !== null && prod !== undefined) {
+                product.title = prod.title;
             }
 
           });
