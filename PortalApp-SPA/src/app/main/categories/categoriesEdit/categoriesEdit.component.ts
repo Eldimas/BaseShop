@@ -37,6 +37,7 @@ export class TodoItemFlatNode {
     type: string;
     icon: string;
     url: string;
+    edit: boolean;
 }
 
 export class TodoItemNode {
@@ -199,42 +200,9 @@ export class CategoriesEditComponent implements AfterViewInit {
 
     // tslint:disable-next-line:typedef
     ngAfterViewInit() {
-        this._categoryService
-            .getCategoriesByProductId(this.productId)
-            .subscribe(res => {
-                this.cats = res;
-
-                this.cats.forEach(cat => {
-                    for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
-                        if (this.treeControl.dataNodes[i].id === cat.id) {
-                            
-                            // this.todoItemSelectionToggle(
-                            //     this.treeControl.dataNodes[i]
-                            // );
-
-                            this.todoItemSelectionSelect(
-                                this.treeControl.dataNodes[i]
-                            );
-
-                            this.treeControl.expand(
-                                this.treeControl.dataNodes[i]
-                            );
-
-                            this.database.dataChange.next(this.database.data);
-                        }
-                    }
-                });
-            });
-
-        // for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
-        //   if (this.treeControl.dataNodes[i].title === 'Category_1_1') {
-        //     this.todoItemSelectionToggle(this.treeControl.dataNodes[i]);
-        //     this.treeControl.expand(this.treeControl.dataNodes[i]);
-        //     this.database.dataChange.next(this.database.data);
-        //   }
-        // }
-
-        //
+       
+        this.checkedCategories();
+        
     }
 
     constructor(
@@ -272,6 +240,36 @@ export class CategoriesEditComponent implements AfterViewInit {
         this.treeControl.expandAll();
     }
 
+    // tslint:disable-next-line:typedef
+    checkedCategories() {
+        this._categoryService
+            .getCategoriesByProductId(this.productId)
+            .subscribe(res => {
+                this.cats = res;
+
+                this.cats.forEach(cat => {
+                    for (let i = 0; i < this.treeControl.dataNodes.length; i++) {
+                        if (this.treeControl.dataNodes[i].id === cat.id) {
+                            
+                            // this.todoItemSelectionToggle(
+                            //     this.treeControl.dataNodes[i]
+                            // );
+
+                            this.todoItemSelectionSelect(
+                                this.treeControl.dataNodes[i]
+                            );
+
+                            this.treeControl.expand(
+                                this.treeControl.dataNodes[i]
+                            );
+
+                            this.database.dataChange.next(this.database.data);
+                        }
+                    }
+                });
+            });
+    }
+
     getLevel = (node: TodoItemFlatNode) => node.level;
 
     isExpandable = (node: TodoItemFlatNode) => node.expandable;
@@ -283,6 +281,8 @@ export class CategoriesEditComponent implements AfterViewInit {
     hasNoContent = (_: number, _nodeData: TodoItemFlatNode) =>
         // tslint:disable-next-line:semicolon
         _nodeData.title === '';
+
+
 
     /**
      * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
@@ -538,6 +538,15 @@ export class CategoriesEditComponent implements AfterViewInit {
         return null;
     }
 
+    // tslint:disable-next-line:typedef
+    editItem(node: TodoItemFlatNode) {
+        // node.edit = true;
+        // this.treeControl.expand(node);
+        // console.log('NODE: ', node);
+        alert('hello');
+        
+    }
+
     /** Select the category so we can insert the new item. */
     // tslint:disable-next-line:typedef
     addNewItem(node: TodoItemFlatNode) {
@@ -571,44 +580,28 @@ export class CategoriesEditComponent implements AfterViewInit {
         // this.database.insertItem(parentNode!, '');
         // tslint:disable-next-line:no-non-null-assertion
         this.database.insertItem(parentNode!, tdNode);
+        
         this.treeControl.expand(node);
         // console.log('node: ', node);
     }
 
     // tslint:disable-next-line:typedef
     removeItem(node: TodoItemFlatNode) {
-        this._categoryService.removeCategory(node.id).subscribe(res => {
+        this._categoryService.removeCategory(node.id, this._translateService.currentLang).subscribe(res => {
             console.log(res);
+
+            const data = this.database.buildFileTree(res, 0);
+
+            // Notify the change.
+            this.database.dataChange.next(data);
+            
+            this.checkedCategories();
+
             this._langService.getCategoryForCurrentLang(
                 this._translateService.currentLang
             );
 
-            this._categoryService.getCategories('ru').subscribe(categories => {
-                // console.log(result);
-                categories.forEach(category => {
-                    const cat = new Category(category);
-                    this.database.cats_data = [];
-                    this.database.cats_data.push(cat);
-                });
-                this.database.initialize();
-            });
-            // const nestedNode = this.getParentNode(node);
-            // if (nestedNode !== null) {
-            //     for (let i = 0; i < nestedNode.children.length; i++) {
-            //         const element = nestedNode.children[i];
-            //         if (element.id === node.id)
-            //         {
-            //             nestedNode.children.splice(i, 1);
-            //             break;
-            //         }
-
-            //     }
-            //     // this.database.updateItem(nestedNode, nestedNode.title);
-
-            // }
-            // nestedNode.children.splice(nestedNode.children.indexOf(node.id), 1);
         });
-        // alert(node.id);
     }
 
     /** Save the node to database */
@@ -669,7 +662,28 @@ export class CategoriesEditComponent implements AfterViewInit {
             );
         });
 
+
+
         // tslint:disable-next-line:no-non-null-assertion
-        this.database.initialize();
+        // this.database.initialize();
+
+        const todoCat = new TodoItemNode();
+        todoCat.id = cat.id;
+        todoCat.children = null;
+        todoCat.title = cat.title;
+        todoCat.titleEng = cat.titleEng;
+        todoCat.titleKaz = cat.titleKaz;
+        todoCat.selected = false;
+        todoCat.expanded = false;
+        todoCat.parentId = null;
+
+        // todoCat.level = 0;
+        // todoCat.expandable = false;
+
+        // this.treeControl.dataNodes.push(todoCat);
+        this.database.data.push(todoCat);
+        this.database.dataChange.next(this.database.data);
+
+        // this.cats.push(cat);
     }
 }

@@ -15,5 +15,6 @@ namespace PortalApp.API.Data.Repos
 
          void UpdateCategoryInProduct(CategoryProductUpdateDto categoryProduct);
         Task<IEnumerable<Category>> GetCategoriesByProductId(Guid id);
+        Task<IEnumerable<Category>> RemoveCategoies(Guid id, string lang);
     }
 }

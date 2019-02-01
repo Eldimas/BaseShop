@@ -288,6 +288,17 @@ namespace PortalApp.API.Data.Repos
 
         }
 
+        public async Task<IEnumerable<Category>> RemoveCategoies(Guid id, string lang)
+        {
+            var cat = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+
+             _context.Categories.Remove(cat);
+             _context.SaveChanges();
+
+             var retCats = GetCategoriesByLang(lang);
+             return await retCats;
+        }
+
         public void  UpdateCategoryInProduct(CategoryProductUpdateDto categoryProduct)
         {
             // текущие категории продукта из базы

@@ -68,10 +68,10 @@ export class CategoryService {
     }
 
     // tslint:disable-next-line:typedef
-    removeCategory(id: string) {
-        const path = this.baseUrl + 'remove/' + id;
-      return  this.http.delete(this.baseUrl + 'remove/' + id);
-        console.log('id: ', id);
+    removeCategory(id: string, lang: string) {
+        const path = this.baseUrl + `remove/${id}/${lang}`;
+      return  this.http.get(path);
+    
         
     }
 }

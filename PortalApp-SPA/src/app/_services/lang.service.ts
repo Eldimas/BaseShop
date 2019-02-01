@@ -27,7 +27,9 @@ export class LangService {
         // );
         // alert(lang);
 
-        this._fuseNavigationService.unregister('navig');
+        this.navigs = [];
+
+        // this._fuseNavigationService.unregister('navig');
 
         const http$ = this._navigService.getNavig(lang);
         http$.subscribe(
@@ -50,7 +52,7 @@ export class LangService {
 
                 this._fuseNavigationService.updateNavigationItem('catalog', {
                     type: 'collapsable',
-                    children: navigs
+                    children: this.navigs
                 });
             },
             err => console.log(err),
@@ -71,6 +73,7 @@ export class LangService {
             categories => {
                 // console.log('navig: ', navigs);
                 // this.navigs = navigs;
+                this.categories = [];
 
                 categories.forEach(category => {
                     const cat = new Category(category);
@@ -88,7 +91,7 @@ export class LangService {
                 this._fuseNavigationService.updateNavigationItem('catalog', {
                     type: 'collapsable',
                     url: null,
-                    children: categories
+                    children: this.categories
                 });
             },
             err => console.log(err),

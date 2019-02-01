@@ -3,6 +3,7 @@ import { environment } from 'environments/environment';
 import { createHttpObservable } from 'app/utils/util';
 import { HttpClient } from '@angular/common/http';
 import { Product } from 'app/main/products/product.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -10,6 +11,7 @@ import { Product } from 'app/main/products/product.model';
 export class ProductsService {
     baseUrl = environment.apiUrl + 'products/';
 
+    
     products: Product[] = [
         {
             id: '111',
@@ -34,6 +36,7 @@ export class ProductsService {
         return this.products;
     }  
 
+   
     
 
     // getNavig(lang: string): any {

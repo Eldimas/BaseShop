@@ -5,6 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogEditCatComponent } from './dialogEditCat/dialogEditCat.component';
 import { Product } from '../products/product.model';
 import { Category } from 'app/_models/category';
+import { LangService } from 'app/_services/lang.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 export interface DialogData {
@@ -30,6 +32,8 @@ export class CategoriesComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private _categoryService: CategoryService,
+        private _langService: LangService,
+        private _translateService: TranslateService,
         public dialog: MatDialog
     ) {
 
@@ -92,6 +96,12 @@ export class CategoriesComponent implements OnInit {
             if (prod !== null && prod !== undefined) {
                 product.title = prod.title;
             }
+
+            this._langService.getCategoryForCurrentLang(
+                this._translateService.currentLang
+            );
+
+
 
           });
     }

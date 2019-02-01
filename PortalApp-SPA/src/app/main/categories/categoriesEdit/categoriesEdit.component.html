@@ -1,21 +1,22 @@
 <div class="page-layout blank p-24" fusePerfectScrollbar>
-<div style="float: right">
-    <button (click)="saveCats(productId)" mat-raised-button color="primary">
-                <mat-icon>save</mat-icon>
-                Сохранить
-            </button>
-</div>
-        
-<div>
-     <button
-        mat-button
-        (click)="saveRootNode('new title', 'new titleEng', 'new titleKaz')"
-        mat-raised-button color="accent">
-        <mat-icon>add</mat-icon>
-        Root category
-    </button>
-</div>
-   
+    <div style="float: right">
+        <button (click)="saveCats(productId)" mat-raised-button color="primary">
+            <mat-icon>save</mat-icon>
+            Сохранить
+        </button>
+    </div>
+
+    <div>
+        <button
+            mat-button
+            (click)="saveRootNode('new title', 'new titleEng', 'new titleKaz')"
+            mat-raised-button
+            color="accent"
+        >
+            <mat-icon>add</mat-icon>
+            Root category
+        </button>
+    </div>
 
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
         <!-- <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle matTreeNodePadding>
@@ -47,6 +48,9 @@
                 >{{ node.title }}</mat-checkbox
             >
             <!-- {{node.title}} -->
+            <button mat-icon-button (click)="editItem(node) ">
+                    <mat-icon>edit</mat-icon>
+                </button>
 
             <button mat-icon-button (click)="addNewItem(node)">
                 <mat-icon>add</mat-icon>
@@ -138,5 +142,4 @@
     </pre>
 
     <!-- <button mat-button (click)='saveCat()'>Save Cat</button> -->
-   
 </div>

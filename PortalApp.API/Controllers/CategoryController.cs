@@ -47,7 +47,7 @@ namespace PortalApp.API.Controllers
             return Ok(cat);
         }
 
-        
+
         [HttpGet("getCategoriesByProductId/{id}")]
         public async Task<IActionResult> GetCategoriesByProductId(Guid id)
         {
@@ -111,15 +111,18 @@ namespace PortalApp.API.Controllers
 
         }
 
-        [HttpDelete("remove/{id}")]
-         public async Task<IActionResult> Remove(Guid id){
+        [HttpGet("remove/{id}/{lang}/")]
+         public async Task<IActionResult> Remove(Guid id, string lang){
 
-             var cat = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            //  var cat = await _context.Categories.FirstOrDefaultAsync(x => x.Id == id);
 
-             _context.Categories.Remove(cat);
-             _context.SaveChanges();
+            //  _context.Categories.Remove(cat);
+            //  _context.SaveChanges();
 
-             return Ok();
+            //  return Ok();
+
+            var retCat = await _catRepo.RemoveCategoies(id, lang);
+            return Ok(retCat);
          }
     
         [HttpPost("updateCategoryInProduct/")]
